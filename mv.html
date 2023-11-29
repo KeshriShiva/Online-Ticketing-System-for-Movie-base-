@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Ticketing System</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: url('poppp.jpg') fixed;
+            background-size: cover;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* Add some opacity to the container */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 400px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background-color: #3498db;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .event-details {
+            padding: 20px;
+        }
+
+        .event-details h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .ticket-options {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .ticket-option {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .ticket-option:hover {
+            background-color: #2980b9;
+        }
+
+        .purchase-btn {
+            background-color: #27ae60;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .purchase-btn:hover {
+            background-color: #219d54;
+        }
+
+        .dropdown {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .movie-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .movie-select:hover {
+            border-color: #3498db;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Online Ticketing System</div>
+        <div class="dropdown">
+            <select class="movie-select" id="movieSelect">
+                <option value="" disabled selected>Select a Bollywood Movie</option>
+                <option value="movie1">Dil Chahta Hai</option>
+                <option value="movie2">Kabhi Khushi Kabhie Gham</option>
+                <option value="movie3">3 Idiots</option>
+                <!-- Add more movies as needed -->
+            </select>
+            <div class="dropdown-content" id="dropdownContent">
+                <a href="#" data-movie="movie1">Dil Chahta Hai</a>
+                <a href="#" data-movie="movie2">Kabhi Khushi Kabhie Gham</a>
+                <a href="#" data-movie="movie3">3 Idiots</a>
+                <!-- Add more movies as needed -->
+            </div>
+        </div>
+        <div class="event-details" id="eventDetails">
+            <!-- Movie details will appear here -->
+        </div>
+        <div class="ticket-options" id="ticketOptions">
+            <!-- Ticket options will appear here -->
+        </div>
+        <button class="purchase-btn" id="purchaseBtn" disabled>Purchase Tickets</button>
+    </div>
+
+    <script>
+        const movieSelect = document.getElementById('movieSelect');
+        const dropdownContent = document.getElementById('dropdownContent');
+        const eventDetails = document.getElementById('eventDetails');
+        const ticketOptions = document.getElementById('ticketOptions');
+        const purchaseBtn = document.getElementById('purchaseBtn');
+
+        movieSelect.addEventListener('change', (event) => {
+            const selectedMovie = event.target.value;
+            displayMovieDetails(selectedMovie);
+        });
+
+        dropdownContent.addEventListener('click', (event) => {
+            event.preventDefault();
+            const selectedMovie = event.target.getAttribute('data-movie');
+            movieSelect.value = selectedMovie;
+            displayMovieDetails(selectedMovie);
+        });
+
+        function displayMovieDetails(movie) {
+            // Simulate fetching movie details from a backend API
+            const movieDetails = getMovieDetails(movie);
+
+            // Display movie details
+            eventDetails.innerHTML = `<h2>${movieDetails.title}</h2>
+                                       <p>Date: ${movieDetails.date}</p>
+                                       <p>Time: ${movieDetails.time}</p>`;
+
+            // Display ticket options
+            ticketOptions.innerHTML = movieDetails.ticketOptions.map(option =>
+                `<div class="ticket-option">${option.type} - $${option.price}</div>`
+            ).join('');
+
+            // Enable purchase button
+            purchaseBtn.disabled = false;
+        }
+
+        function getMovieDetails(movie) {
+            // Replace this with actual backend API call
+            const movieData = {
+                movie1: {
+                    title: 'Dil Chahta Hai',
+                    date: 'December 1, 2023',
+                    time: '6:30 PM',
+                    ticketOptions: [
+                        { type: 'Standard', price: 10 },
+                        { type: 'VIP', price: 20 }
+                    ]
+                },
+                movie2: {
+                    title: 'Kabhi Khushi Kabhie Gham',
+                    date: 'December 2, 2023',
+                    time: '7:00 PM',
+                    ticketOptions: [
+                        { type: 'Regular', price: 12 },
+                        { type: 'Premium', price: 25 }
+                    ]
+                },
+                movie3: {
+                    title: '3 Idiots',
+                    date: 'December 3, 2023',
+                    time: '8:00 PM',
+                    ticketOptions: [
+                        { type: 'General', price: 8 },
+                        { type: 'Deluxe', price: 18 }
+                    ]
+                }
+                // Add more movies as needed
+            };
+
+            return movieData[movie];
+        }
+    </script>
+</body>
+</html>
